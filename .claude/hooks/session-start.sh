@@ -29,6 +29,14 @@ log "Ensuring HyperFrames render browser"
 npx --yes hyperframes browser ensure >/dev/null 2>&1 \
   || log "WARN: hyperframes browser ensure failed"
 
+# yt-dlp for downloading source footage
+if ! command -v yt-dlp >/dev/null 2>&1; then
+  log "Installing yt-dlp"
+  pip install -q -U yt-dlp >/dev/null 2>&1 \
+    || pip install -q -U --break-system-packages yt-dlp >/dev/null 2>&1 \
+    || log "WARN: yt-dlp install failed"
+fi
+
 # whisper.cpp, built from source and put on PATH
 if ! command -v whisper-cli >/dev/null 2>&1; then
   if [ ! -x "$WHISPER_SRC/build/bin/whisper-cli" ]; then
